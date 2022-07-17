@@ -1,0 +1,25 @@
+<template>
+  <!--
+    This example requires updating your template:
+
+    ```
+    <html class="h-full bg-gray-50">
+    <body class="h-full">
+    ```
+  -->
+  <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      <router-view></router-view>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "AuthLayout"
+}
+</script>
+
+<style scoped>
+
+</style>
