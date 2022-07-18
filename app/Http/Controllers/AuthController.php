@@ -10,6 +10,12 @@ use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
+    /**
+     * register
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function register(Request $request)
     {
         $data = $request->validate([
@@ -35,6 +41,12 @@ class AuthController extends Controller
         ], 200);
     }
 
+    /**
+     * login
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -60,6 +72,21 @@ class AuthController extends Controller
         return response([
             "user" => $user,
             "token" => $token
+        ]);
+    }
+
+    /**
+     * logout
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function logout()
+    {
+        $user = Auth::user();
+        $user->currentAccessToken()->delete();
+
+        return response([
+            "success" => true
         ]);
     }
 }

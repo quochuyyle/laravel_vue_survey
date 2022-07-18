@@ -22,7 +22,9 @@
     <p class="mt-2 text-center text-sm text-gray-600">
       Or
       {{ ' ' }}
-      <router-link :to="{ name: 'Login', params: {} }" class="font-medium text-indigo-600 hover:text-indigo-500"> start your 14-day free trial </router-link>
+      <router-link :to="{ name: 'Login', params: {} }" class="font-medium text-indigo-600 hover:text-indigo-500"> start
+        your 14-day free trial
+      </router-link>
     </p>
   </div>
   <form class="mt-8 space-y-6" @submit.prevent="register">
@@ -48,7 +50,8 @@
       </div>
       <div>
         <label for="password_confirmation" class="sr-only">Password Confirmation</label>
-        <input id="password_confirmation" v-model="user.password_confirmation" type="password" autocomplete="current-password_confirmation" required=""
+        <input id="password_confirmation" v-model="user.password_confirmation" type="password"
+               autocomplete="current-password_confirmation" required=""
                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                placeholder="Password Confirmation"/>
       </div>
@@ -82,7 +85,7 @@
 import {LockClosedIcon} from '@heroicons/vue/solid'
 import {reactive} from "vue";
 import store from "../store";
-import { useRouter } from "vue-router";
+import {useRouter} from "vue-router";
 
 export default {
   name: "Register",
@@ -91,16 +94,16 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const user = {
+    const user = reactive({
       name: "",
       email: "",
       password: "",
       password_confirmation: ""
-    };
+    });
 
-    function register(){
+    function register() {
       store.dispatch("register", user).then(() => {
-        router.push({ name: "Dashboard", params: {} })
+        router.push({name: "Dashboard", params: {}})
       });
     }
 
