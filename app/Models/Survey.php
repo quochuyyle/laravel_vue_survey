@@ -18,6 +18,7 @@ class Survey extends Model
         "status",
         "description",
         "expire_date",
+        "image"
     ];
 
     public function getSlugOptions(): SlugOptions

@@ -17,5 +17,10 @@ export default defineConfig({
   // },
   devServer: {
     proxy: 'http://127.0.0.1:8000',
-  }
+  },
+  // resolve: {
+  //   alias: {
+  //     path: "path-browserify",
+  //   },
+  // },
 })

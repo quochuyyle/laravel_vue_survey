@@ -219,6 +219,7 @@ export default {
   },
   emits: ["change", "addQuestion", "deleteQuestion"],
   setup(props) {
+    console.log(props.question)
     // Re-create the whole question data to avoid unintentional reference change
     const model = ref(JSON.parse(JSON.stringify(props.question)))
     const questionTypes = computed(() => store.state.questionTypes);
@@ -285,13 +286,12 @@ export default {
       questionTypes,
       upperCaseFirst,
       shouldHaveOptions,
-      getOptions,
-      setOptions,
       addOption,
       removeOption,
       typeChange,
       addQuestion,
-      deleteQuestion
+      deleteQuestion,
+      dataChange
     }
   }
 }
