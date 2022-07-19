@@ -152,13 +152,14 @@
       </h4>
 
       <div
-        v-if="!model.data.options.length"
+        v-if="!model.data.options?.length"
         class="text-xs text-gray-600 text-center py-3"
       >
         You don't have any options defined
       </div>
       <!-- Option list-->
       <div
+        v-else
         v-for="(option, index) in model.data.options"
         :key="option.uuid"
         class="flex items-center mb-1"
@@ -218,7 +219,7 @@ export default {
     index: Number
   },
   emits: ["change", "addQuestion", "deleteQuestion"],
-  setup(props) {
+  setup(props, { emit }) {
     console.log(props.question)
     // Re-create the whole question data to avoid unintentional reference change
     const model = ref(JSON.parse(JSON.stringify(props.question)))
@@ -234,8 +235,9 @@ export default {
     }
 
     function getOptions() {
-      return model.value.data.options;
+       return model.value.data.options ?? [];
     }
+
 
     function setOptions(options) {
       model.value.data.options = options;
@@ -243,12 +245,13 @@ export default {
 
     function addOption() {
       setOptions([
-        ...getOptions(),
+         ...getOptions(),
         {
           uuid: uuidv4(),
           text: ""
         }
       ]);
+      console.log(model.value.data.options)
       dataChange();
     }
 
@@ -265,20 +268,20 @@ export default {
     }
 
     function dataChange() {
-      const data = JSON.parse(JSON.stringify(model.value));
+      const data = model.value;
       if (!shouldHaveOptions()) {
         delete data.data.options;
       }
 
-      this.$emit("change", data)
+      emit("change", data)
     }
 
     function addQuestion() {
-      this.$emit("addQuestion", props.index + 1)
+      emit("addQuestion", props.index + 1)
     }
 
     function deleteQuestion() {
-      this.$emit("deleteQuestion", props.question)
+      emit("deleteQuestion", props.question)
     }
 
     return {
@@ -291,7 +294,9 @@ export default {
       typeChange,
       addQuestion,
       deleteQuestion,
-      dataChange
+      dataChange,
+      getOptions,
+      setOptions
     }
   }
 }
