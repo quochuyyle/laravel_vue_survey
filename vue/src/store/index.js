@@ -15,7 +15,13 @@ const store = createStore({
     },
     surveys: {
       loading: false,
-      data: []
+      data: [],
+      links: []
+    },
+    notification: {
+      show: false,
+      message: null,
+      type: null
     },
     questionTypes: ["text", "select", "radio", "checkbox", "textarea"]
   },
@@ -35,9 +41,10 @@ const store = createStore({
           throw err;
         });
     },
-    getSurveys({commit}){
+    getSurveys({commit}, { url = null } = {}){
+      url = url || "/survey";
       commit("setSurveysLoading", true);
-      return axiosClient.get("/survey")
+      return axiosClient.get(url)
         .then((res) => {
           commit("setSurveysLoading", false);
           commit("setSurveys", res.data)
@@ -83,18 +90,33 @@ const store = createStore({
         response = axiosClient.put(`/survey/${survey.id}`, survey)
           .then((res) => {
             commit("setCurrentSurvey", res.data);
-            return res;
+            return res.data;
           });
       } else {
         response = axiosClient.post("/survey", survey)
           .then((res) => {
-            commit("setCurrentSurvey", res.data);
+            commit("setCurrentSurvey", res);
             return res;
           })
       }
     },
     deleteSurvey({commit}, id) {
       return axiosClient.delete(`/survey/${id}`);
+    },
+    getSurveyBySlug({ commit }, slug){
+      commit("setCurrentSurveyLoading", true);
+      return axiosClient.get(`/survey-by-slug/${slug}`)
+        .then((res) => {
+          commit("setCurrentSurvey", res.data);
+          commit("setCurrentSurveyLoading", false)
+        })
+        .catch((err) => {
+          commit("setCurrentSurveyLoading", false);
+          throw err;
+        });
+    },
+    saveSurveyAnswer({ commit }, { surveyId, answers }){
+      return axiosClient.post(`/survey/${surveyId}/answer`, { answers });
     }
   },
   mutations: {
@@ -129,9 +151,17 @@ const store = createStore({
     },
     setSurveys: (state, surveys) => {
       state.surveys.data = surveys.data;
+      state.surveys.links = surveys.meta.links;
     },
+    notify: (state, {message, type}) => {
+      state.notification.show = true;
+      state.notification.type = type;
+      state.notification.message = message;
+      setTimeout(() => {
+        state.notification.show = false;
+      }, 3000)
+    }}
 
-}
 ,
 modules: {
 }
