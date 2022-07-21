@@ -188,7 +188,7 @@
             </div>
           </div>
 
-          <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+          <div class="px-4 py-3 bg-gray-50 flex justify-between sm:px-6">
             <button
               type="submit"
               class="
@@ -204,8 +204,22 @@
             >
               Save
             </button>
+            <router-link
+              :to="{ name: 'Surveys', params: {} }"
+              class="
+                  inline-flex justify-center
+                  py-2 px-4
+                  border border-transparent
+                  shadow-sm text-sm
+                  font-medium rounded-md text-white
+                  bg-red-600 hover:bg-red-700
+                  focus:outline-none focus:ring-2
+                  focus:ring-offset-2 focus:ring-red-500
+                "
+            >
+              Back
+            </router-link>
           </div>
-
         </div>
       </div>
     </form>
@@ -258,7 +272,6 @@ export default {
 
     function onImageChose(ev) {
       const file = ev.target.files[0];
-
       const reader = new FileReader();
       reader.onload = () => {
         // The field to send on backend and apply validations
@@ -297,7 +310,8 @@ export default {
     }
 
     function saveSurvey() {
-      store.dispatch("saveSurvey", { ...model.value }).then(({ data }) => {
+      store.dispatch("saveSurvey", { ...model.value })
+        .then(({ data }) => {
         store.commit("notify", {
           type: "success",
           message: "The survey was successfully created",

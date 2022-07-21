@@ -36,7 +36,8 @@
            text-red-500 hover:border-red-600
         "
       >
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor"
              stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round"
                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -125,10 +126,9 @@
 
   <!-- Data -->
   <div>
-    <div v-if="shouldHaveOptions" class="mt-2">
+    <div v-if="shouldHaveOptions()" class="mt-2">
       <h4 class="text-sm font-semibold mb-1 flex justify-between items-center">
         Options
-
         <!-- Add new option -->
         <button
           type="button"
@@ -189,7 +189,8 @@
             hover:border-red-100
         "
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor"
                stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round"
                   d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -217,7 +218,7 @@ export default {
     index: Number
   },
   emits: ["change", "addQuestion", "deleteQuestion"],
-  setup(props, { emit }) {
+  setup(props, {emit}) {
     const haveOptions = ref(false);
     // Re-create the whole question data to avoid unintentional reference change
     const model = ref(JSON.parse(JSON.stringify(props.question)))
@@ -229,12 +230,11 @@ export default {
 
     //Check if the question should have options
     function shouldHaveOptions() {
-      ["select", "radio", "checkbox"].includes(model.value.type) ? haveOptions.value = true : haveOptions.value = false
       return ["select", "radio", "checkbox"].includes(model.value.type);
     }
 
     function getOptions() {
-       return model.value.data.options ?? [];
+      return model.value.data.options ?? [];
     }
 
 
@@ -244,7 +244,7 @@ export default {
 
     function addOption() {
       setOptions([
-         ...getOptions(),
+        ...getOptions(),
         {
           uuid: uuidv4(),
           text: ""
@@ -263,7 +263,6 @@ export default {
       if (shouldHaveOptions()) {
         setOptions(getOptions() || []);
       }
-      dataChange()
     }
 
     function dataChange() {

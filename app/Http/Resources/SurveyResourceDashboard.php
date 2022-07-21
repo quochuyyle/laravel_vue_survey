@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\URL;
 
-class SurveyResource extends JsonResource
+class SurveyResourceDashboard extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -21,12 +21,12 @@ class SurveyResource extends JsonResource
             "image_url" => $this->image ? URL::to($this->image) : null,
             "title" => $this->title,
             "slug" => $this->slug,
-            "status" => $this->status,
+            "status" => $this->status !== "draft",
             "description" => $this->description,
             "created_at" => Carbon::parse($this->created_at)->format("Y-m-d H:i:s"),
-            "updated_at" => Carbon::parse($this->updated_at)->format("Y-m-d H:i:s"),
             "expire_date" => $this->expire_date,
-            "questions" => SurveyQuestionResource::collection($this->questions),
+            "questions" => $this->questions()->count(),
+            "answers" => $this->answers()->count(),
         ];
     }
 }
