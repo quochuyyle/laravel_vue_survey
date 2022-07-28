@@ -155,7 +155,7 @@ const store = createStore({
       },
       updateSurvey: (state, survey) => {
         state.surveys = state.surveys.map((s) => {
-          if (s.id == survey.data.id) {
+          if (s.id === survey.data.id) {
             return survey.data;
           }
           return s;

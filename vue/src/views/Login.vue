@@ -107,6 +107,7 @@ export default {
     })
     const loading = ref(false);
     const errorMsg = ref("");
+    const errors = ref({});
 
     function login() {
       loading.value = true;
@@ -116,6 +117,9 @@ export default {
           router.push({name: "Dashboard", params: {}})
         })
         .catch(err => {
+          if (err.response.status === 422) {
+            errors.value = err.response.data.errors;
+          }
           loading.value = false;
           errorMsg.value = err.response.data.error;
         });
@@ -125,7 +129,8 @@ export default {
       user,
       errorMsg,
       loading,
-      login
+      login,
+      errors
     }
   }
 }
