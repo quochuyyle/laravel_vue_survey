@@ -5,19 +5,13 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [vue()],
   //CORS POLICY
-  // server: {
-  //   proxy: {
-  //     "/api": {
-  //       target: "https://apiservice.com",
-  //       changeOrigin: true,
-  //       secure: false,
-  //       rewrite: (path) => path.replace(/^\/api/, ""),
-  //     },
-  //   },
-  // },
-  devServer: {
-    proxy: 'http://127.0.0.1:8000',
+  server: {
+    host: true,
+    port: 8080
   },
+  // devServer: {
+  //   proxy: 'http://127.0.0.1:8000',
+  // },
   // resolve: {
   //   alias: {
   //     path: "path-browserify",

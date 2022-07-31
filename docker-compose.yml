@@ -1,0 +1,77 @@
+version: "3.0"
+services:
+    # PHP service
+    api:
+        build:
+            context: ./
+            dockerfile: development/api.dockerfile
+        image: cloudsigma.com/php
+        container_name: survey_api
+        restart: unless-stopped
+        tty: true
+        environment:
+            SERVICE_NAME: survey_api
+            SERVICE_TAGS: dev
+        working_dir: /var/www/html/
+        volumes:
+            - ./:/var/www/html/
+            - .development/laravel.ini:/usr/local/etc/php/conf.d/laravel.ini
+        networks:
+            - app-network
+    # Vue service
+    app:
+        container_name: survey_app
+        build:
+            context: ./
+            dockerfile: development/app.dockerfile
+        command: sh -c "npm install && npm run dev"
+        volumes:
+            - ./vue:/app
+            - /app/node_modules/
+#        environment:
+#            HOST: 127.0.0.1
+        networks:
+            - app-network
+    # Nginx service
+    http_nginx:
+        build:
+            context: ./
+            dockerfile: development/nginx.dockerfile
+        image: nginx:alpine
+        container_name: http_nginx
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "8088:80"
+#            - "8080:80"
+            - "443:443"
+        volumes:
+            - ./storage/logs/:/var/log/nginx
+        networks:
+            - app-network
+    # MYSQL service
+    db:
+        image: mysql:8.0
+        container_name: survey_db
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_DATABASE: laravel_vue_survey
+            MYSQL_ROOT_PASSWORD: 123456
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        volumes:
+            - dbdata:/var/lib/mysql/
+            - ./mysql/my.cnf:/etc/mysql/mysql.cnf
+        networks:
+            - app-network
+# Docker networks
+networks:
+    app-network:
+        driver: bridge
+# Volumes
+volumes:
+    dbdata:
+        driver: local
