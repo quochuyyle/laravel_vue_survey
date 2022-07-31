@@ -20,13 +20,14 @@ services:
             - app-network
     # Vue service
     app:
+        stdin_open: true
         container_name: survey_app
         build:
-            context: ./
-            dockerfile: development/app.dockerfile
+            context: ./vue
+            dockerfile: public/Dockerfile
         command: sh -c "npm install && npm run dev"
         volumes:
-            - ./vue:/app
+            - .vue:/var/www/html/
             - /app/node_modules/
 #        environment:
 #            HOST: 127.0.0.1
