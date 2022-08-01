@@ -13,10 +13,10 @@ COPY ./vue/package*.json ./
 RUN npm install
 
 # copy project files and folders to the current working directory (i.e. 'app' folder)
-COPY ./vue /app
+COPY ./vue .
 
 # build app for production with minification
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 8080
 CMD [ "http-server", "dist" ]
